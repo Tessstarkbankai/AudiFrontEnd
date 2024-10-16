@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
 
+//seat
+
 const SeatLayout = ({
   rows = 25,
   cols = 43
