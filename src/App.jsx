@@ -7,7 +7,8 @@ import EventDetails from './Components/EventDetails'
 import backgroundImage from './Assets/invertisHome.jpg'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import SeatLayout from './Components/SeatLayout'
-
+import EventTicket from './Components/EventTicket'
+import AdminEventForm from './Components/AdminEventForm'
 
 function App() {
   const [selectedSeats, setSelectedSeats] = React.useState([]);
@@ -27,6 +28,8 @@ function App() {
         <Route path='/Login' element={<Login/>}/>
         <Route path='/SignUp' element={<SignUpPage/>}/>
         <Route path='/HomePage' element={<HomePage/>}/>
+        <Route path='/AdminPanel' element={<AdminEventForm/>}/>
+        <Route path='/TicketPage' element={<EventTicket/>}/>
         <Route path='/EventDetails' element={<EventDetails backgroundImage={backgroundImage} eventName={'Shark Tank Invertis'} description={"vgg vyt ytvgf fcytc iuhgui uighui gtft hgcc kk"}/>}/>
         <Route path='/SeatLayout' element={<div className="p-8">
       <SeatLayout

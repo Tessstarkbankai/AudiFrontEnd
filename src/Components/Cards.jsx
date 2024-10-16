@@ -1,26 +1,53 @@
-import React from 'react'
-import Card from '../Components/Card'
-import poster2 from '../Assets/poster2.jpeg'
-import poster1 from '../Assets/poster1.jpeg'
-import poster3 from '../Assets/poster3.jpeg'
-import poster4 from '../Assets/poster4.jpeg'
-import poster5 from '../Assets/poster5.jpeg'
-import poster6 from '../Assets/poster6.jpeg'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import Card from '../Components/Card';
 
+const Cards = () => {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-function Cards() {
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch('/api/events'); // Backend
+        if (!response.ok) {
+          throw new Error('Failed to fetch events');
+        }
+        const data = await response.json();
+        setEvents(data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  if (loading) {
+    return <div className="text-center py-10">Loading events...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-10 text-red-500">Error: {error}</div>;
+  }
+
   return (
-    <div className=' flex justify-around flex-wrap'>
-      <Link to='/EventDetails'><Card image={poster1} details={"Wanda Visoion"} date={"30/02/20"}/></Link>
-      <Card image={poster2} details={"Multiverse of Madness"} date={"30/02/20"}/>
-      <Card image={poster3} details={"Avengers infinty war"} date={"30/02/20"}/>
-      <Card image={poster4} details={"Wanda Visoion"} date={"30/02/20"}/>
-      <Card image={poster5} details={"Wanda Visoion"} date={"30/02/20"}/>
-      <Card image={poster6} details={"Wanda Visoion"} date={"30/02/20"}/>
-
+    <div className="flex justify-around flex-wrap">
+      {events.map((event) => (
+        <Link key={event.id} to={`/EventDetails/${event.id}`}>
+          <Card
+            image={event.image}
+            details={event.name}
+            date={event.date}
+            description={event.description}
+          />
+        </Link>
+      ))}
     </div>
-  )
-}
+  );
+};
 
-export default Cards
+export default Cards;
