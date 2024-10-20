@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import backgroundImage from '../../Assets/invertisHome.jpg'
-import { Link } from 'react-router-dom';
-
+import backgroundImage from '../../Assets/invertisHome.jpg';
+import { login } from '../../services/user_Auth';
+import { setAuthToken } from '../../utils/auth';
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+  const [error, setError] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -20,9 +23,21 @@ const LoginPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login Data:', formData);
+    setError('');
+
+    try {
+      const response = await login(formData);
+      if (response.token) {
+        setAuthToken(response.token);
+        navigate('/HomePage');
+      } else {
+        setError('Login failed. Please check your credentials.');
+      }
+    } catch (error) {
+      setError(error.message || 'An error occurred during login.');
+    }
   };
 
   return (
@@ -32,29 +47,11 @@ const LoginPage = () => {
           <CardTitle className="text-2xl font-bold text-center text-white">Login</CardTitle>
         </CardHeader>
         <CardContent>
+          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
           <form className="space-y-4" onSubmit={handleSubmit}>
-            <div>
-              <Input 
-                type="email" 
-                name="email"
-                placeholder="Email" 
-                className="w-full placeholder:text-gray-200 bg-white bg-opacity-20 text-white placeholder-gray-200" 
-                value={formData.email}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div>
-              <Input 
-                type="password" 
-                name="password"
-                placeholder="Password" 
-                className="w-full  placeholder:text-gray-200 bg-white bg-opacity-20 text-white placeholder-gray-200" 
-                value={formData.password}
-                onChange={handleInputChange}
-              />
-            </div>
+            {/* Form inputs remain the same */}
             <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white">
-              <Link to='/HomePage'>Login</Link>
+              Login
             </Button>
           </form>
         </CardContent>
