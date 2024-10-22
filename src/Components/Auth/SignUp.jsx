@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import backgroundImage from '../../Assets/invertisHome.jpg';
 import { signUp } from '../../services/user_Auth';
-import { setAuthToken } from '../../utils/auth';
+import { setAuthToken } from '../../services/auth_utility';
 
 const SignUpPage = () => {
   const navigate = useNavigate();

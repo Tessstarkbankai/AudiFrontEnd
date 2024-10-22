@@ -5,12 +5,12 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import backgroundImage from '../../Assets/invertisHome.jpg';
 import { login } from '../../services/user_Auth';
-import { setAuthToken } from '../../utils/auth';
+import { setAuthToken } from '../../services/auth_utility';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: '',
+    userId: '',
     password: '',
   });
   const [error, setError] = useState('');
@@ -49,7 +49,9 @@ const LoginPage = () => {
         <CardContent>
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
           <form className="space-y-4" onSubmit={handleSubmit}>
-            {/* Form inputs remain the same */}
+            <input className='mr-10' type="text" placeholder='Id' onChange={handleInputChange}/>
+            <input type="text" placeholder='Password' onChange={handleInputChange} />
+
             <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white">
               Login
             </Button>
